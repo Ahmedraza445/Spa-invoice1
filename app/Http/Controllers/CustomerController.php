@@ -20,7 +20,7 @@ class CustomerController extends Controller
                     ->orWhere('lastname', 'like', '%'.request('q').'%')
                     ->orWhere('email', 'like', '%'.request('q').'%');
             })
-            ->limit(6)
+            // ->limit(6)
             ->get();
 
         return response()

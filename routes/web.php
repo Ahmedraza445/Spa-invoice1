@@ -11,14 +11,14 @@ use Illuminate\Support\Facades\Route;
 // });
 Route::resource('/api/customers', 'App\Http\Controllers\CustomerController');
 
-Route::get('/api/customers', [CustomerController::class, 'search']);
+Route::get('/api/search/customers', [CustomerController::class, 'search']);
 Route::post('/api/customers/create', [CustomerController::class, 'create']);
 Route::get('/api/customers', [CustomerController::class, 'index']);
 
 
 Route::resource('/api/products', 'App\Http\Controllers\ProductController');
 
-Route::get('/api/products', [ProductController::class,'search']);
+Route::get('/api/search/products', [ProductController::class,'search']);
 Route::post('/api/products/create', [ProductController::class, 'create']);
 Route::get('/api/products', [ProductController::class, 'index']);
 // Route::get('/api/products/show', [ProductController::class, 'show']);

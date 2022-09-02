@@ -7,11 +7,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label>Invoice</label>
+                        <label>Customer</label>
                         <typeahead :url="customerURL" :initialize="form.customer" @input="onCustomer" />
-                        <small class="error-control" v-if="errors.customer_id">
-                            {{errors.customer_id[0]}}
-                        </small>
+                        <!-- <small class="error-control" v-if="errors.customer_id">
+                            {{errors.customer_id[0]}} -->
+                        <!-- </small>  -->
                     </div>
                 </div>
                 <div class="col-6">
@@ -68,24 +68,24 @@
                 </thead>
                 <tbody>
                     <tr v-for="(item, index) in form.items" :key="index">
+                    <!-- <tr> -->
                         <td class="w-14">
-                             <Typeahead :url="productURL" :initial="item.product"
-                                @input="onProduct(index, $event)" />
-                            <!-- <small class="error-control" v-if="errors[`items.${index}.product_id`]">
+                            <Typeahead :url="productURL" :initialize="item.product" @input="onProduct" />
+                            <small class="error-control" v-if="errors[`items.${index}.product_id`]">
                                 {{errors[`items.${index}.product_id`][0]}}
-                            </small> -->
+                            </small>
                         </td>
                         <td class="w-4">
                        <input type="text" class="form-control" v-model="item.unit_price">
-                            <!-- <small class="error-control" v-if="errors[`items.${index}.unit_price`]">
-                                {{errors[`items.${index}.unit_price`][0]}}
-                            </small> --> -->
+                            <small class="error-control" v-if="errors[`item.${index}.unit_price`]">
+                                {{errors[`item.${index}.unit_price`][0]}}
+                            </small>
                         </td>
                         <td class="w-2">
                             <input type="text" class="form-control" v-model="item.qty">
-                            <!-- <small class="error-control" v-if="errors[`items.${index}.qty`]">
-                                {{errors[`items.${index}.qty`][0]}}
-                            </small> --> 
+                            <small class="error-control" v-if="errors[`items.${index}.qty`]">
+                                {{errors[`item.${index}.qty`][0]}}
+                            </small> 
                         </td>
                         <td class="w-4">
                             <span class="form-control">
@@ -104,7 +104,7 @@
                             @click="addNewLine">Add New Line</button>
                         </td>
                         <td class="form-sumary">Sub Total</td>
-                        <!-- <td>{{subTotal | formatMoney}}</td> -->
+                        <td>{{subTotal | formatMoney}}</td>
                     </tr>
                     <tr>
                         <td colspan="3" class="form-summary">Discount</td>
@@ -117,13 +117,13 @@
                     </tr>
                     <tr>
                         <td colspan="3" class="form-summary">Grand Total</td>
-                        <!-- <td>{{total | formatMoney}}</td> -->
+                        <td class="form-control">{{total | formatMoney}}</td>
                     </tr>
                 </tfoot>
             </table>
             <hr>
             <div class="row">
-                <div class="col-12">
+                <div class="col-5">
                     <div class="form-group">
                         <label>Terms and Conditions</label>
                         <textarea class="form-control" v-model="form.terms_and_conditions"></textarea>
@@ -152,7 +152,6 @@
             'create': `/api/invoices/create`,
             'edit': `/api/invoices/${to.params.id}/edit`
         }
-
         return (urls[to.meta.mode] || urls['create'])
     }
     export default {
@@ -160,8 +159,11 @@
         data () {
             return {
                 form: {
-                items:''
-                     },
+                items:{ 
+                    product: {}, 
+                },
+                customer:{},
+            },      
                 errors: {},
                 isProcessing: false,
                 show: false,
@@ -169,8 +171,8 @@
                 store: '/api/invoices',
                 method: 'POST',
                 title: 'Create',
-                productURL: '/api/products',
-                customerURL: '/api/customers'
+                productURL: '/api/search/products',
+                customerURL: '/api/search/customers'
             }
         },
         beforeRouteEnter(to, from, next) {
@@ -188,14 +190,14 @@
                 })
         },
         computed: {
-            // subTotal() {
-            //     return this.form.items.reduce((carry, item) => {
-            //         return carry + (Number(item.unit_price) * Number(item.qty))
-            //     }, 0)
-            // },
-            // total() {
-            //     return this.subTotal - Number(this.form.discount)
-            // }
+            subTotal() {
+                return this.form.items.reduce((carry, item) => {
+                    return (Number(item.unit_price) * Number(item.qty));
+                }, 0)
+            },
+            total() {
+                return this.subTotal - Number(this.form.discount)
+            }
         },
         methods: {
             setData(res) {
@@ -216,15 +218,16 @@
                     product: null,
                     unit_price: 0,
                     qty: 1
-                })
+                });
             },
             onCustomer(e) {
                 const customer = e.target.value
-                Vue.set(this.$data.form, 'customer', customer)
-                Vue.set(this.$data.form, 'customer_id', customer.id)
+                Vue.set(this.form, 'customer', customer)
+                Vue.set(this.form, 'customer_id', customer.id)
             },
-            onProduct(index, e) {
+            onProduct(index,e) {
                 const product = e.target.value
+                console.log(product);
                 Vue.set(this.form.items[index], 'product', product)
                 Vue.set(this.form.items[index], 'product_id', product.id)
                 Vue.set(this.form.items[index], 'unit_price', product.unit_price)

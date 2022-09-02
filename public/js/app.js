@@ -1894,7 +1894,10 @@ function initialize(to) {
   data: function data() {
     return {
       form: {
-        items: ''
+        items: {
+          product: {}
+        },
+        customer: {}
       },
       errors: {},
       isProcessing: false,
@@ -1903,8 +1906,8 @@ function initialize(to) {
       store: '/api/invoices',
       method: 'POST',
       title: 'Create',
-      productURL: '/api/products',
-      customerURL: '/api/customers'
+      productURL: '/api/search/products',
+      customerURL: '/api/search/customers'
     };
   },
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
@@ -1924,14 +1927,15 @@ function initialize(to) {
       next();
     });
   },
-  computed: {// subTotal() {
-    //     return this.form.items.reduce((carry, item) => {
-    //         return carry + (Number(item.unit_price) * Number(item.qty))
-    //     }, 0)
-    // },
-    // total() {
-    //     return this.subTotal - Number(this.form.discount)
-    // }
+  computed: {
+    subTotal: function subTotal() {
+      return this.form.items.reduce(function (carry, item) {
+        return Number(item.unit_price) * Number(item.qty);
+      }, 0);
+    },
+    total: function total() {
+      return this.subTotal - Number(this.form.discount);
+    }
   },
   methods: {
     setData: function setData(res) {
@@ -1956,11 +1960,12 @@ function initialize(to) {
     },
     onCustomer: function onCustomer(e) {
       var customer = e.target.value;
-      vue__WEBPACK_IMPORTED_MODULE_2__["default"].set(this.$data.form, 'customer', customer);
-      vue__WEBPACK_IMPORTED_MODULE_2__["default"].set(this.$data.form, 'customer_id', customer.id);
+      vue__WEBPACK_IMPORTED_MODULE_2__["default"].set(this.form, 'customer', customer);
+      vue__WEBPACK_IMPORTED_MODULE_2__["default"].set(this.form, 'customer_id', customer.id);
     },
     onProduct: function onProduct(index, e) {
       var product = e.target.value;
+      console.log(product);
       vue__WEBPACK_IMPORTED_MODULE_2__["default"].set(this.form.items[index], 'product', product);
       vue__WEBPACK_IMPORTED_MODULE_2__["default"].set(this.form.items[index], 'product_id', product.id);
       vue__WEBPACK_IMPORTED_MODULE_2__["default"].set(this.form.items[index], 'unit_price', product.unit_price);
@@ -2044,10 +2049,10 @@ __webpack_require__.r(__webpack_exports__);
       this.$router.push("/invoices/".concat(item.id));
     },
     setData: function setData(res) {
-      vue__WEBPACK_IMPORTED_MODULE_1__["default"].set(this.$data, 'model', res.data.data.data);
-      this.page = this.model.current_page;
-      this.$bar.finish();
       console.log(res);
+      vue__WEBPACK_IMPORTED_MODULE_1__["default"].set(this.$data, 'model', res.data.data);
+      this.page = this.model.current_page;
+      this.$bar.finish(); // console.log(res)
     },
     nextPage: function nextPage() {
       if (this.model.next_page_url) {
@@ -2268,7 +2273,7 @@ var render = function render() {
     staticClass: "col-12"
   }, [_c("div", {
     staticClass: "form-group"
-  }, [_c("label", [_vm._v("Invoice")]), _vm._v(" "), _c("typeahead", {
+  }, [_c("label", [_vm._v("Customer")]), _vm._v(" "), _c("typeahead", {
     attrs: {
       url: _vm.customerURL,
       initialize: _vm.form.customer
@@ -2276,9 +2281,7 @@ var render = function render() {
     on: {
       input: _vm.onCustomer
     }
-  }), _vm._v(" "), _vm.errors.customer_id ? _c("small", {
-    staticClass: "error-control"
-  }, [_vm._v("\n                        " + _vm._s(_vm.errors.customer_id[0]) + "\n                    ")]) : _vm._e()], 1)]), _vm._v(" "), _c("div", {
+  })], 1)]), _vm._v(" "), _c("div", {
     staticClass: "col-6"
   }, [_c("div", {
     staticClass: "form-group"
@@ -2377,14 +2380,14 @@ var render = function render() {
     }, [_c("Typeahead", {
       attrs: {
         url: _vm.productURL,
-        initial: item.product
+        initialize: item.product
       },
       on: {
-        input: function input($event) {
-          return _vm.onProduct(index, $event);
-        }
+        input: _vm.onProduct
       }
-    })], 1), _vm._v(" "), _c("td", {
+    }), _vm._v(" "), _vm.errors["items.".concat(index, ".product_id")] ? _c("small", {
+      staticClass: "error-control"
+    }, [_vm._v("\n                            " + _vm._s(_vm.errors["items.".concat(index, ".product_id")][0]) + "\n                        ")]) : _vm._e()], 1), _vm._v(" "), _c("td", {
       staticClass: "w-4"
     }, [_c("input", {
       directives: [{
@@ -2407,7 +2410,9 @@ var render = function render() {
           _vm.$set(item, "unit_price", $event.target.value);
         }
       }
-    }), _vm._v(" "), _vm._v(" -->\n                    ")]), _vm._v(" "), _c("td", {
+    }), _vm._v(" "), _vm.errors["item.".concat(index, ".unit_price")] ? _c("small", {
+      staticClass: "error-control"
+    }, [_vm._v("\n                            " + _vm._s(_vm.errors["item.".concat(index, ".unit_price")][0]) + "\n                        ")]) : _vm._e()]), _vm._v(" "), _c("td", {
       staticClass: "w-2"
     }, [_c("input", {
       directives: [{
@@ -2430,7 +2435,9 @@ var render = function render() {
           _vm.$set(item, "qty", $event.target.value);
         }
       }
-    })]), _vm._v(" "), _c("td", {
+    }), _vm._v(" "), _vm.errors["items.".concat(index, ".qty")] ? _c("small", {
+      staticClass: "error-control"
+    }, [_vm._v("\n                            " + _vm._s(_vm.errors["item.".concat(index, ".qty")][0]) + "\n                        ")]) : _vm._e()]), _vm._v(" "), _c("td", {
       staticClass: "w-4"
     }, [_c("span", {
       staticClass: "form-control"
@@ -2453,7 +2460,7 @@ var render = function render() {
     }
   }, [_vm._v("Add New Line")])]), _vm._v(" "), _c("td", {
     staticClass: "form-sumary"
-  }, [_vm._v("Sub Total")])]), _vm._v(" "), _c("tr", [_c("td", {
+  }, [_vm._v("Sub Total")]), _vm._v(" "), _c("td", [_vm._v(_vm._s(_vm._f("formatMoney")(_vm.subTotal)))])]), _vm._v(" "), _c("tr", [_c("td", {
     staticClass: "form-summary",
     attrs: {
       colspan: "3"
@@ -2481,10 +2488,17 @@ var render = function render() {
     }
   }), _vm._v(" "), _vm.errors.discount ? _c("small", {
     staticClass: "form-control"
-  }, [_vm._v("\n                            " + _vm._s(_vm.errors.discount[0]) + "\n                        ")]) : _vm._e()])]), _vm._v(" "), _vm._m(3)])]), _vm._v(" "), _c("hr"), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                            " + _vm._s(_vm.errors.discount[0]) + "\n                        ")]) : _vm._e()])]), _vm._v(" "), _c("tr", [_c("td", {
+    staticClass: "form-summary",
+    attrs: {
+      colspan: "3"
+    }
+  }, [_vm._v("Grand Total")]), _vm._v(" "), _c("td", {
+    staticClass: "form-control"
+  }, [_vm._v(_vm._s(_vm._f("formatMoney")(_vm.total)))])])])]), _vm._v(" "), _c("hr"), _vm._v(" "), _c("div", {
     staticClass: "row"
   }, [_c("div", {
-    staticClass: "col-12"
+    staticClass: "col-5"
   }, [_c("div", {
     staticClass: "form-group"
   }, [_c("label", [_vm._v("Terms and Conditions")]), _vm._v(" "), _c("textarea", {
@@ -2543,16 +2557,6 @@ var staticRenderFns = [function () {
       _c = _vm._self._c;
 
   return _c("thead", [_c("tr", [_c("th", [_vm._v("Item Description")]), _vm._v(" "), _c("th", [_vm._v("Unit Price")]), _vm._v(" "), _c("th", [_vm._v("Qty")]), _vm._v(" "), _c("th", [_vm._v("Total")])])]);
-}, function () {
-  var _vm = this,
-      _c = _vm._self._c;
-
-  return _c("tr", [_c("td", {
-    staticClass: "form-summary",
-    attrs: {
-      colspan: "3"
-    }
-  }, [_vm._v("Grand Total")])]);
 }];
 render._withStripped = true;
 
@@ -2581,8 +2585,6 @@ var render = function render() {
     staticClass: "panel-heading"
   }, [_c("span", {
     staticClass: "panel-title"
-  }, [_vm._v("Invoices")]), _vm._v(" "), _c("span", {
-    staticClass: "panel-title"
   }, [_vm._v("Invoices")]), _vm._v(" "), _c("div", [_c("router-link", {
     staticClass: "btn btn-primary",
     attrs: {
@@ -2601,13 +2603,13 @@ var render = function render() {
         }
       }
     }, [_c("td", {
-      staticClass: "w-1"
+      staticClass: "w-2"
     }, [_vm._v(_vm._s(item.id))]), _vm._v(" "), _c("td", {
       staticClass: "w-3"
     }, [_vm._v(_vm._s(item.date))]), _vm._v(" "), _c("td", {
-      staticClass: "w-3"
+      staticClass: "w-2"
     }, [_vm._v(_vm._s(item.number))]), _vm._v(" "), _c("td", {
-      staticClass: "w-9"
+      staticClass: "w-3"
     }, [_vm._v(_vm._s(item.customer.text))]), _vm._v(" "), _c("td", {
       staticClass: "w-3"
     }, [_vm._v(_vm._s(item.due_date))]), _vm._v(" "), _c("td", {
@@ -2638,7 +2640,7 @@ var staticRenderFns = [function () {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("thead", [_c("tr", [_c("th", [_vm._v("ID")]), _vm._v(" "), _c("th", [_vm._v("Date")]), _vm._v(" "), _c("th", [_vm._v("Number")]), _vm._v(" "), _c("th", [_vm._v("Customer")]), _vm._v(" "), _c("th", [_vm._v("Due Date")])])]);
+  return _c("thead", [_c("tr", [_c("th", [_vm._v("ID")]), _vm._v(" "), _c("th", [_vm._v("Date")]), _vm._v(" "), _c("th", [_vm._v("Number")]), _vm._v(" "), _c("th", [_vm._v("Customer")]), _vm._v(" "), _c("th", [_vm._v("Due Date")]), _vm._v(" "), _c("th", [_vm._v("Total")])])]);
 }];
 render._withStripped = true;
 
@@ -2793,6 +2795,8 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   // {path: '/products/create', component: require('../views/products/form.vue').default},
   // {path: '/products/:id/edit', component: require('../views/products/form.vue').default, meta: {mode: 'edit'}},
   // {path: '/products/:id', component: require('../views/products/show.vue').default}
+  // {path: '/', redirect: '/dashboard'},
+  // {path: '/dashboard', component: require('../views/Dashboard/dashboard.vue').default},
   ]
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (router);

@@ -1,7 +1,7 @@
 <template>
     <div class="panel">
         <div class="panel-heading">
-            <span class="panel-title">Invoices</span>
+            <!-- <span class="panel-title">Invoices</span> -->
             <span class="panel-title">Invoices</span>
             <div>
                 <router-link to="/invoices/create" class="btn btn-primary">
@@ -17,21 +17,23 @@
                         <th>Date</th>
                         <th>Number</th>
                         <th>Customer</th>
+                        <!-- <th>Product</th> -->
                         <th>Due Date</th>
-                        <!-- <th>Total</th>
-                        <th>ID</th>
+                        <th>Total</th>
+                        <!-- <th>ID</th>
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Email</th>
-                        <th>Address</th> -->
+                        <th>Address</th> --> 
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="item in model.data" :key="item.data" @click="detailsPage(item)">
-                        <td class="w-1">{{item.id}}</td>
+                        <td class="w-2">{{item.id}}</td>
                         <td class="w-3">{{item.date}}</td>
-                        <td class="w-3">{{item.number}}</td>
-                        <td class="w-9">{{item.customer.text}}</td>
+                        <td class="w-2">{{item.number}}</td>
+                        <td class="w-3">{{item.customer.text}}</td>
+                        <!-- <td class="w-9">{{item.items.product}}</td> -->
                         <td class="w-3">{{item.due_date}}</td>
                         <td class="w-3">{{item.total | formatMoney}}</td>
                         <!-- <td class="w-1">{{item.id}}</td>
@@ -87,10 +89,11 @@
                 this.$router.push(`/invoices/${item.id}`)
             },
             setData(res) {
-                Vue.set(this.$data, 'model', res.data.data.data)
+                console.log(res);
+                Vue.set(this.$data, 'model', res.data.data)
                 this.page = this.model.current_page
                 this.$bar.finish()
-                console.log(res)
+                // console.log(res)
             },
             nextPage() {
                 if(this.model.next_page_url) {

@@ -58,17 +58,17 @@ class InvoiceController extends Controller
             'discount' => 'required|numeric|min:0',
             'terms_and_conditions' => 'required|max:2000',
             'items' => 'required|array|min:1',
-            'items.*.product_id' => 'required|integer|exists:products,id',
-            'items.*.unit_price' => 'required|numeric|min:0',
-            'items.*.qty' => 'required|integer|min:1'
+            'items.product_id' => 'required|integer|exists:products,id',
+            'items.unit_price' => 'required|numeric|min:0',
+            'items.qty' => 'required|integer|min:1'
         ]);
 
         $invoice = new Invoice;
         $invoice->fill($request->except('items'));
-
-        $invoice->sub_total = collect($request->items)->sum(function($item) {
-            return $item['qty'] * $item['unit_price'];
-        });
+        $invoice->sub_total = $request->items['qty'] * $request->items['unit_price'];
+        // $invoice->sub_total = collect($request->items)->sum(function($request) {
+        //     return $request['items']['qty'] * $request['items']['unit_price'];
+        // });
 
         $invoice = DB::transaction(function() use ($invoice, $request) {
             $counter = Counter::where('key', 'invoice')->first();
@@ -80,6 +80,7 @@ class InvoiceController extends Controller
             ]);
 
             $counter->increment('value');
+            $invoice->save();
 
             return $invoice;
         });

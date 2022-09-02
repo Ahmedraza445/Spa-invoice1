@@ -22,6 +22,8 @@ const router = new VueRouter({
         // {path: '/products/create', component: require('../views/products/form.vue').default},
         // {path: '/products/:id/edit', component: require('../views/products/form.vue').default, meta: {mode: 'edit'}},
         // {path: '/products/:id', component: require('../views/products/show.vue').default}
+        // {path: '/', redirect: '/dashboard'},
+        // {path: '/dashboard', component: require('../views/Dashboard/dashboard.vue').default},
     ]
 })
 export default router
