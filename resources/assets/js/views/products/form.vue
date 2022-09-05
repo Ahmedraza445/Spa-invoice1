@@ -1,7 +1,7 @@
 <template>
     <div class="panel" v-if="show">
         <div class="panel-heading">
-            <span class="panel-title">Add Customer</span>
+            <span class="panel-title">Add Product</span>
         </div>
         <div class="panel-body">
             
@@ -92,7 +92,7 @@ export default {
                 this.store = `/api/products/${this.$route.params.id}`
                 this.method = 'PUT'
                 this.title = 'Edit'
-        }
+            }
 
             this.show = true
             this.$bar.finish()
@@ -109,7 +109,7 @@ export default {
         },
         onCancel(){
             if(this.$route.meta.mode === 'edit') {
-                this.$router.push(`${this.resource}/${this.form.id}`)
+                this.$router.push(`${this.resource}`)
             } else {
                 this.$router.push(`${this.resource}`)
             }
@@ -121,7 +121,8 @@ export default {
           
             .then((res) => {
                 if(res.data && res.data.saved) {
-                    this.$router.push(`${this.resource}/${this.form.id}`)
+                    // this.$router.push(`${this.resource}/${res.data.id}`)
+                    this.$router.push(`${this.resource}`)
                     // this.success(res)
                 }
             })
@@ -133,8 +134,8 @@ export default {
             })
         },
         success(res) {
-                this.$router.push(`${this.resource}/${res.data.id}`)
-            }
+            this.$router.push(`${this.resource}/${res.data.id}`)
+        }
     }
 }
 </script>

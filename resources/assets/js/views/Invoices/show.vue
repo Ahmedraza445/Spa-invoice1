@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
     <div class="panel" v-if="show">
         <div class="panel-heading">
             <span class="panel-title">{{model.number}}</span>
@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="document-body">
-                    <table lcass="table document-table">
+                    <table class="table document-table">
                         <thead>
                             <tr>
                                 <th>Item Code</th>
@@ -56,11 +56,6 @@
                                 <th>Unit Price</th>
                                 <th>Qty</th>
                                 <th>Total</th>
-                                <th>Customer Id</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Email</th>
-                                <th>Address</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -142,4 +137,4 @@
             }
         }
     }
-</script> -->
+</script>

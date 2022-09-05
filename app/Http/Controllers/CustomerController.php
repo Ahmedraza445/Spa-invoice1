@@ -56,7 +56,7 @@ class CustomerController extends Controller
 
         $customer->save();
         return response()
-            ->json(['saved' => true, 'id']);
+            ->json(['saved' => true, 'id' => $customer->id]);
     }
     public function show($id)
     {

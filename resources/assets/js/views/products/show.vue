@@ -1,7 +1,6 @@
 <template>
     <div class="panel" v-if="show">
         <div class="panel-heading">
-            <!-- <span class="panel-title">{{model.number}}</span> -->
             <div>
                 <router-link to="/products" class="btn">Back</router-link>
                 <router-link :to="`/products/${model.id}/edit`" class="btn">Edit</router-link>
@@ -10,13 +9,26 @@
         </div>
         <div class="panel-body">
             <div class="document">
+                <div class="row">
+                    <div class="col-2">
+                        <table class="document-summary">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="document-title">Product</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 <div class="document-body">
-                    <table lcass="table document-table">
+                    <table class="table document-table">
                         <thead>
                             <tr>
-                                <td>Item Code</td>
-                                <td>Products</td>
-                                <td>Unit Price</td>
+                                <th>Item Code</th>
+                                <th>Description</th>
+                                <th>Unit Price</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -42,8 +54,6 @@
             return {
                 show: false,
                 model: {
-                    // items: [],
-                    // customer: {} 
                 }
             }
         },
@@ -79,3 +89,4 @@
         }
     }
 </script>
+

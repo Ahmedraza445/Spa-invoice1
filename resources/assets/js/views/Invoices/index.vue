@@ -17,14 +17,8 @@
                         <th>Date</th>
                         <th>Number</th>
                         <th>Customer</th>
-                        <!-- <th>Product</th> -->
                         <th>Due Date</th>
                         <th>Total</th>
-                        <!-- <th>ID</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Address</th> --> 
                     </tr>
                 </thead>
                 <tbody>
@@ -32,15 +26,9 @@
                         <td class="w-2">{{item.id}}</td>
                         <td class="w-3">{{item.date}}</td>
                         <td class="w-2">{{item.number}}</td>
-                        <td class="w-3">{{item.customer.text}}</td>
-                        <!-- <td class="w-9">{{item.items.product}}</td> -->
+                        <td class="w-3">{{item.customer ? item.customer.text : ""}}</td>
                         <td class="w-3">{{item.due_date}}</td>
                         <td class="w-3">{{item.total | formatMoney}}</td>
-                        <!-- <td class="w-1">{{item.id}}</td>
-                        <td class="w-3">{{item.firstname}}</td>
-                        <td class="w-3">{{item.lastname}}</td>
-                        <td class="w-9">{{item.email}}</td>
-                        <td class="w-3">{{item.address}}</td> -->
                     </tr>
                 </tbody>
             </table>
@@ -89,11 +77,12 @@
                 this.$router.push(`/invoices/${item.id}`)
             },
             setData(res) {
-                console.log(res);
-                Vue.set(this.$data, 'model', res.data.data)
+                // console.log(res);
+                Vue.set(this.$data, 'model', res.data.results)
                 this.page = this.model.current_page
                 this.$bar.finish()
-                // console.log(res)
+                // console.log(res.data.results.data[0].customer.text)
+                console.log(res.data.results.data)
             },
             nextPage() {
                 if(this.model.next_page_url) {

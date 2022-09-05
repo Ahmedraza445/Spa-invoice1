@@ -50,7 +50,7 @@ class ProductController extends Controller
 
         $product->save();
         return response()
-            ->json(['saved' => true, 'id']);
+            ->json(['saved' => true, 'id' => $product->id]);
     }
     public function show($id)
     {

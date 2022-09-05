@@ -114,7 +114,7 @@
             },
             onCancel(){
                 if(this.$route.meta.mode === 'edit') {
-                    this.$router.push(`${this.resource}/${this.form.id}`)
+                    this.$router.push(`${this.resource}`)
                 } else {
                     this.$router.push(`${this.resource}`)
                 }
@@ -123,9 +123,11 @@
                 this.errors = {}
                 this.isProcessing = true
                 byMethod(this.method, this.store, this.form)
+                
                 .then((res) => {
                     if(res.data && res.data.saved) {
-                        this.$router.push(`${this.resource}/${this.form.id}`)
+                        // console.log(res);
+                        this.$router.push(`${this.resource}`)
                         // this.success(res)
                     }
                 })
@@ -139,6 +141,25 @@
             success(res) {
                 this.$router.push(`${this.resource}/${res.data.id}`)
             }
+            // onSave(){
+            //     this.errors = {}
+            //     this.isProcessing = true
+            //     byMethod(this.method, this.store, this.form)
+            //         .then((res) => {
+            //             if(res.data && res.data.saved) {
+            //                 this.success(res)
+            //             }
+            //         })
+            //         .catch((error) => {
+            //             if(error.response.status === 422) {
+            //                 this.errors = error.response.data.errors
+            //             }
+            //             this.isProcessing = false
+            //         })
+            // },
+            // success(res) {
+            //     this.$router.push(`${this.resource}/${res.data.id}`)
+            // }
         }
     }
     </script>

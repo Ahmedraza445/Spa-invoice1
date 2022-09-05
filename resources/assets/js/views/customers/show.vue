@@ -9,14 +9,27 @@
         </div>
         <div class="panel-body">
             <div class="document">
+                <div class="row">
+                    <div class="col-2">
+                        <table class="document-summary">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="document-title">Customer</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 <div class="document-body">
-                    <table lcass="table document-table">
+                    <table class="table document-table">
                         <thead>
                             <tr>
-                                <td>First Name</td>
-                                <td>Last Name</td>
-                                <td>Email</td>
-                                <td>Address</td>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Address</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -24,7 +37,7 @@
                                 <td class="w-3">{{model.firstname}}</td>
                                 <td class="w-3">{{model.lastname}}</td>
                                 <td class="w-3">{{model.email}}</td>
-                                <td class="w-3">{{model.address}}</td>
+                                <td class="w-2">{{model.address}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -43,8 +56,6 @@
             return {
                 show: false,
                 model: {
-                    // items: [],
-                    // customer: {} 
                 }
             }
         },
