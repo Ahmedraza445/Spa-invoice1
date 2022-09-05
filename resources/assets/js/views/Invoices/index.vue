@@ -7,6 +7,9 @@
                 <router-link to="/invoices/create" class="btn btn-primary">
                     New Invoice
                 </router-link>
+                <router-link to="/dashboard" class="btn btn-primary">
+                    back
+                </router-link>
             </div>
         </div>
         <div class="panel-body">
@@ -23,9 +26,9 @@
                 </thead>
                 <tbody>
                     <tr v-for="item in model.data" :key="item.data" @click="detailsPage(item)">
-                        <td class="w-2">{{item.id}}</td>
+                        <td class="w-1">{{item.id}}</td>
                         <td class="w-3">{{item.date}}</td>
-                        <td class="w-2">{{item.number}}</td>
+                        <td class="w-3">{{item.number}}</td>
                         <td class="w-3">{{item.customer ? item.customer.text : ""}}</td>
                         <td class="w-3">{{item.due_date}}</td>
                         <td class="w-3">{{item.total | formatMoney}}</td>
@@ -82,7 +85,7 @@
                 this.page = this.model.current_page
                 this.$bar.finish()
                 // console.log(res.data.results.data[0].customer.text)
-                console.log(res.data.results.data)
+                // console.log(res.data.results.data)
             },
             nextPage() {
                 if(this.model.next_page_url) {

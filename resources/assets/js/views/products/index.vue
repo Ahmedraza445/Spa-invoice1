@@ -6,6 +6,9 @@
                 <router-link to="/products/create" class="btn btn-primary">
                     New Product
                 </router-link>
+                <router-link to="/dashboard" class="btn btn-primary">
+                    back
+                </router-link>
             </div>
         </div>
         <div class="panel-body">

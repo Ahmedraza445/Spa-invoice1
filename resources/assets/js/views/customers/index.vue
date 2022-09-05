@@ -6,6 +6,9 @@
                 <router-link to="/customers/create" class="btn btn-primary">
                     New Customer
                 </router-link>
+                <router-link to="/dashboard" class="btn btn-primary">
+                    back
+                </router-link>
             </div>
         </div>
         <div class="panel-body">

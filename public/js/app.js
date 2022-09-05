@@ -2048,8 +2048,7 @@ __webpack_require__.r(__webpack_exports__);
       vue__WEBPACK_IMPORTED_MODULE_1__["default"].set(this.$data, 'model', res.data.results);
       this.page = this.model.current_page;
       this.$bar.finish(); // console.log(res.data.results.data[0].customer.text)
-
-      console.log(res.data.results.data);
+      // console.log(res.data.results.data)
     },
     nextPage: function nextPage() {
       if (this.model.next_page_url) {
@@ -2849,12 +2848,16 @@ var render = function render() {
     attrs: {
       to: "/customers"
     }
-  }, [_vm._v("Customers")])], 1), _vm._v(" "), _c("div", [_c("router-link", {
+  }, [_vm._v("Customers")])], 1)]), _vm._v(" "), _c("div", {
+    staticClass: "panel-heading"
+  }, [_c("div", [_c("router-link", {
     staticClass: "btn btn-primary",
     attrs: {
       to: "/products"
     }
-  }, [_vm._v("Products")])], 1), _vm._v(" "), _c("div", [_c("router-link", {
+  }, [_vm._v("Products")])], 1)]), _vm._v(" "), _c("div", {
+    staticClass: "panel-heading"
+  }, [_c("div", [_c("router-link", {
     staticClass: "btn btn-primary",
     attrs: {
       to: "/invoices"
@@ -3215,7 +3218,12 @@ var render = function render() {
     attrs: {
       to: "/invoices/create"
     }
-  }, [_vm._v("\n                New Invoice\n            ")])], 1)]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                New Invoice\n            ")]), _vm._v(" "), _c("router-link", {
+    staticClass: "btn btn-primary",
+    attrs: {
+      to: "/dashboard"
+    }
+  }, [_vm._v("\n                back\n            ")])], 1)]), _vm._v(" "), _c("div", {
     staticClass: "panel-body"
   }, [_c("table", {
     staticClass: "table table-link"
@@ -3228,11 +3236,11 @@ var render = function render() {
         }
       }
     }, [_c("td", {
-      staticClass: "w-2"
+      staticClass: "w-1"
     }, [_vm._v(_vm._s(item.id))]), _vm._v(" "), _c("td", {
       staticClass: "w-3"
     }, [_vm._v(_vm._s(item.date))]), _vm._v(" "), _c("td", {
-      staticClass: "w-2"
+      staticClass: "w-3"
     }, [_vm._v(_vm._s(item.number))]), _vm._v(" "), _c("td", {
       staticClass: "w-3"
     }, [_vm._v(_vm._s(item.customer ? item.customer.text : ""))]), _vm._v(" "), _c("td", {
@@ -3566,7 +3574,12 @@ var render = function render() {
     attrs: {
       to: "/customers/create"
     }
-  }, [_vm._v("\n                New Customer\n            ")])], 1)]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                New Customer\n            ")]), _vm._v(" "), _c("router-link", {
+    staticClass: "btn btn-primary",
+    attrs: {
+      to: "/dashboard"
+    }
+  }, [_vm._v("\n                back\n            ")])], 1)]), _vm._v(" "), _c("div", {
     staticClass: "panel-body"
   }, [_c("table", {
     staticClass: "table table-link"
@@ -3858,7 +3871,12 @@ var render = function render() {
     attrs: {
       to: "/products/create"
     }
-  }, [_vm._v("\n                New Product\n            ")])], 1)]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                New Product\n            ")]), _vm._v(" "), _c("router-link", {
+    staticClass: "btn btn-primary",
+    attrs: {
+      to: "/dashboard"
+    }
+  }, [_vm._v("\n                back\n            ")])], 1)]), _vm._v(" "), _c("div", {
     staticClass: "panel-body"
   }, [_c("table", {
     staticClass: "table table-link"
