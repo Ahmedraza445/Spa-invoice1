@@ -9,22 +9,23 @@ use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
-    public function search()
-    {
-        $results = Product::orderBy('item_code')
-            ->when(request('q'), function($query) {
-                $query->where('item_code', 'like', '%'.request('q').'%')
-                ->orWhere('description', 'like', '%'.request('q').'%');
-            })
-            ->limit(6)
-            ->get();
+    // public function search()
+    // {
+    //     $results = Product::orderBy('item_code')
+    //         ->when(request('q'), function($query) {
+    //             $query->where('item_code', 'like', '%'.request('q').'%')
+    //             ->orWhere('description', 'like', '%'.request('q').'%');
+    //         })
+    //         ->limit(6)
+    //         ->get();
 
-        return response()
-            ->json(['results' => $results]);
-    }
+    //     return response()
+    //         ->json(['results' => $results]);
+    // }
     public function index()
     {
-        $results = Product::orderBy('created_at', 'desc')
+        $results = Product::with(['vendor'])
+            ->orderBy('created_at', 'desc')
             ->paginate(15);
         //dd($results);
         return response()
@@ -35,9 +36,10 @@ class ProductController extends Controller
         $counter = Counter::where('key', 'product')->first();
 
         $form = [
-                'item_code' => null,
-                'description' => null,
-                'unit_price' => 0,
+            'vendor' => null,
+            'item_code' => null,
+            'description' => null,
+            'unit_price' => 0
         ];
 
         return response()
@@ -48,13 +50,24 @@ class ProductController extends Controller
         $product = new Product;
         $product->fill($request->all());
 
-        $product->save();
+        $product = DB::transaction(function() use ($product, $request) {
+            $counter = Counter::where('key', 'product')->first();
+            $product->number = $counter->prefix . $counter->value;
+
+            // custom method from app/Helper/HasManyRelation
+            // $product->storeHasMany([
+            //     'items' => $request->items
+            // ]);
+        });
+        // $product->save();
+        return $product;
         return response()
             ->json(['saved' => true, 'id' => $product->id]);
     }
     public function show($id)
     {
-        $model = Product::findOrFail($id);
+        $model = Product::with(['vendor'])
+            ->findOrFail($id);
 
         return response()
             ->json(['model' => $model]);
@@ -62,7 +75,8 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $form = Product::findOrFail($id);
+        $form = Product::with(['vendor'])
+            ->findOrFail($id);
 
         return response()
             ->json(['form' => $form]);
@@ -73,9 +87,16 @@ class ProductController extends Controller
 
         $product->fill($request->all());
 
+        $product = DB::transaction(function() use ($product, $request) {
+            // custom method from app/Helper/HasManyRelation
+            // $product->updateHasMany([
+            //     'items' => $request->items
+            // ]);
+        });
         $product->save();
         return response()
             ->json(['saved' => true, 'id']);
+    
     }
     public function destroy($id)
     {

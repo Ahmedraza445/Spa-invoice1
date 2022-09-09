@@ -1,11 +1,10 @@
 <template>
     <div class="panel">
         <div class="panel-heading">
-            <!-- <span class="panel-title">Invoices</span> -->
-            <span class="panel-title">Invoices</span>
+            <span class="panel-title">Vendors</span>
             <div>
-                <router-link to="/invoices/create" class="btn btn-primary">
-                    New Invoice
+                <router-link to="/vendors/create" class="btn btn-primary">
+                    New Vendor
                 </router-link>
                 <router-link to="/dashboard" class="btn btn-primary">
                     back
@@ -17,21 +16,20 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Date</th>
-                        <th>Number</th>
-                        <th>Customer</th>
-                        <th>Due Date</th>
-                        <th>Total</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Store</th>
+                        <th>Email</th>
+
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="item in model.data" :key="item.data" @click="detailsPage(item)">
                         <td class="w-1">{{item.id}}</td>
-                        <td class="w-3">{{item.date}}</td>
-                        <td class="w-3">{{item.number}}</td>
-                        <td class="w-3">{{item.customer ? item.customer.text : ""}}</td>
-                        <td class="w-3">{{item.due_date}}</td>
-                        <td class="w-3">{{item.total | formatMoney}}</td>
+                        <td class="w-1">{{item.name}}</td>
+                        <td class="w-3">{{item.phone}}</td>
+                        <td class="w-3">{{item.store}}</td>
+                        <td class="w-3">{{item.email}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -63,13 +61,13 @@ export default {
         }
     },
     beforeRouteEnter(to, from, next) {
-        get('/api/invoices', to.query)
+        get('/api/vendors', to.query)
             .then((res) => {
                 next(vm => vm.setData(res))
             })
     },
     beforeRouteUpdate(to, from, next) {
-        get('/api/invoices', to.query)
+        get('/api/vendors', to.query)
             .then((res) => {
                 this.setData(res)
                 next()
@@ -77,23 +75,20 @@ export default {
     },
     methods: {
         detailsPage(item) {
-            this.$router.push(`/invoices/${item.id}`)
+            this.$router.push(`/vendors/${item.id}`)
         },
         setData(res) {
-            // console.log(res);
+            //console.log(res)
             Vue.set(this.$data, 'model', res.data.results)
             this.page = this.model.current_page
             this.$bar.finish()
-            // console.log(res.data.results.data[0].customer.text)
-            // console.log(res.data.results.data)
         },
         nextPage() {
             if (this.model.next_page_url) {
                 const query = Object.assign({}, this.$route.query)
                 query.page = query.page ? (Number(query.page) + 1) : 2
-
                 this.$router.push({
-                    path: '/invoices',
+                    path: '/vendors',
                     query: query
                 })
             }
@@ -104,7 +99,7 @@ export default {
                 query.page = query.page ? (Number(query.page) - 1) : 1
 
                 this.$router.push({
-                    path: '/invoices',
+                    path: '/vendors',
                     query: query
                 })
             }

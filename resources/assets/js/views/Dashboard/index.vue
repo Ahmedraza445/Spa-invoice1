@@ -15,5 +15,10 @@
                 <router-link to="/invoices" class="btn btn-primary">Invoices</router-link>
             </div>
         </div>
+        <div class="panel-heading">
+            <div>
+                <router-link to="/vendors" class="btn btn-primary">Vendors</router-link>
+            </div>
+        </div>
     </div>
 </template>

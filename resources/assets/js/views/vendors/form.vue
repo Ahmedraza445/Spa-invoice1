@@ -8,30 +8,31 @@
             <table class="form-table">
                 <thead>
                     <tr>
-                        <th>Item Code</th>
-                        <th>Vendor</th>
-                        <th>Product</th>
-                        <th>Unit Price</th>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Store</th>
+                        <th>Email</th>
 
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td class="w-5">
-                            <input type="text" class="form-control" v-model="form.item_code">
-                        </td>
-                        <td class="w-14">
-                            <typeahead :url="vendorURL" :initialize="form.vendor" @input="onVendor" />
-                            <small class="error-control" v-if="errors.vendor_id">
-                                {{errors.vendor_id[0]}}
-                            </small>
+                            <input type="text" class="form-control" v-model="form.id">
                         </td>
                         <td class="w-5">
-                            <input type="text" class="form-control" v-model="form.description">
+                            <input type="text" class="form-control" v-model="form.name">
+                        </td>
+                        <td class="w-5">
+                            <input type="text" class="form-control" v-model="form.phone">
                         </td>
 
                         <td class="w-5">
-                            <input type="text" class="form-control" v-model="form.unit_price">
+                            <input type="text" class="form-control" v-model="form.store">
+                        </td>
+                        <td class="w-5">
+                            <input type="text" class="form-control" v-model="form.email">
                         </td>
                     </tr>
                 </tbody>
@@ -54,8 +55,8 @@ import { Typeahead } from '../../components/typeahead'
 
 function initialize(to) {
     let urls = {
-        'create': `/api/products/create`,
-        'edit': `/api/products/${to.params.id}/edit`
+        'create': `/api/vendors/create`,
+        'edit': `/api/vendors/${to.params.id}/edit`
     }
 
     return (urls[to.meta.mode] || urls['create'])
@@ -68,12 +69,11 @@ export default {
             errors: {},
             isProcessing: false,
             show: false,
-            resource: '/products',
-            store: '/api/products',
+            resource: '/vendors',
+            store: '/api/vendors',
             method: 'POST',
             title: 'Create',
-            productURL: '/api/products',
-            vendorURL: '/api/search/vendors',
+            VendorURL: '/api/vendors',
             //customerURL: '/api/customers'
         }
     },
@@ -96,7 +96,7 @@ export default {
             Vue.set(this.$data, 'form', res.data.form)
 
             if (this.$route.meta.mode === 'edit') {
-                this.store = `/api/products/${this.$route.params.id}`
+                this.store = `/api/vendors/${this.$route.params.id}`
                 this.method = 'PUT'
                 this.title = 'Edit'
             }
@@ -105,21 +105,15 @@ export default {
             this.$bar.finish()
         },
         addNewLine() {
-            this.form.products.push({
-                vendor: null,
-                vendor_id: null,
-                item_code: null,
-                description: null,
-                unit_price: 0,
+            this.form.vendors.push({
+                name: null,
+                phone: null,
+                store: null,
+                email: null
             })
         },
         removeItem(index) {
             this.form.splice(index, 1)
-        },
-        onVendor(e) {
-            const vendor = e.target.value
-            Vue.set(this.$data.form, 'vendor', vendor)
-            Vue.set(this.$data.form, 'vendor_id', vendor.id)
         },
         onCancel() {
             if (this.$route.meta.mode === 'edit') {
