@@ -42,6 +42,7 @@ class VendorController extends Controller
                 'phone' => null,
                 'store' => null,
                 'email' => null,
+                'active' => 1
         ];
 
         return response()
@@ -78,9 +79,14 @@ class VendorController extends Controller
         $vendor->fill($request->all());
 
         $vendor->save();
+        // return api([
+        // 'Updated' => true
+        // ]);  
         return response()
             ->json(['saved' => true, 'id' => $vendor->id]);
+
     }
+    // => $vendor->id
     public function destroy($id)
     {
         $vendor = Vendor::findOrFail($id);
@@ -89,5 +95,14 @@ class VendorController extends Controller
 
         return response()
             ->json(['deleted' => true]);
+    }
+    public function updateActive($id, Request $request)
+    {
+        $vendor = Vendor::findOrFail($id);
+        $vendor->fill($request->all());
+
+        $vendor->save();
+        return response()
+            ->json(['saved' => true, 'id' => $vendor->id]);
     }
 }

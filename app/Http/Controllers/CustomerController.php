@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class CustomerController extends Controller
 {
     
-    public function search()
+    public function search($firstname)
     
     {
         //dd(request()->all());
@@ -26,6 +26,17 @@ class CustomerController extends Controller
         return response()
             ->json(['results' => $results]);
     }
+    // function search($name)
+    // {
+    //     $results = Customer::where('firstname', 'LIKE', '%'. $firstname. '%')->get();
+    //     if(count($results)){
+    //      return Response()->json($results);
+    //     }
+    //     else
+    //     {
+    //     return response()->json(['Result' => 'No Data not found'], 404);
+    //   }
+    // }
     public function index()
     {
         $results = Customer::orderBy('created_at', 'desc')

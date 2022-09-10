@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 Route::resource('/api/customers', 'App\Http\Controllers\CustomerController');
 
 Route::get('/api/search/customers', [CustomerController::class, 'search']);
+Route::get('api/search/customers/{firstname}',[CustomerController::class, 'search']);
 Route::post('/api/customers/create', [CustomerController::class, 'create']);
 Route::get('/api/customers', [CustomerController::class, 'index']);
 
@@ -28,9 +29,14 @@ Route::resource('/api/vendors', 'App\Http\Controllers\VendorController');
 
 Route::get('/api/search/vendors', [VendorController::class, 'search']);
 Route::post('/api/vendors/create', [VendorController::class, 'create']);
-Route::get('/api/vendors', [VendorController::class, 'index']);
+// Route::get('/api/vendors', [VendorController::class, 'index']);
+Route::get('/api/vendors/index', [VendorController::class, 'index']);
+
 
 Route::resource('/api/invoices', 'App\Http\Controllers\InvoiceController');
+Route::get('/search/', [InvoiceController::class,'search'])->name('search');
+// Route::get('api/invoices/search/{customer}',[InvoiceController::class, 'search']);
+// Route::get('/api/search/invoices', [InvoiceController::class,'search']);
 
 Route::get('{vue?}',function(){
     return view('welcome');

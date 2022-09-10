@@ -4,6 +4,14 @@
             <!-- <span class="panel-title">Invoices</span> -->
             <span class="panel-title">Invoices</span>
             <div>
+                <button class="btn btn-primary" @click="search">
+                    Search
+                </button>
+                <input type="search" placeholder="Search" aria-label="Search" v-model="customer">
+                <!-- <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form> -->
                 <router-link to="/invoices/create" class="btn btn-primary">
                     New Invoice
                 </router-link>
@@ -53,10 +61,12 @@
 </template>
 <script type="text/javascript">
 import Vue from 'vue'
-import { get } from '../../lib/api'
+import { byMethod, get } from '../../lib/api'
 export default {
     data() {
         return {
+            param: "",
+            customer: "",
             model: {
                 data: []
             }
@@ -76,6 +86,13 @@ export default {
             })
     },
     methods: {
+        search() {
+            this.param = "?="
+            if (this.customer) {
+                this.param = this.param + "&customer=" + this.customer;
+            }
+            byMethod('GET', `api/invoices/${this.param}`)
+        },
         detailsPage(item) {
             this.$router.push(`/invoices/${item.id}`)
         },

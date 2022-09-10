@@ -8,31 +8,34 @@
             <table class="form-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <!-- <th>ID</th> -->
                         <th>Name</th>
                         <th>Phone</th>
                         <th>Store</th>
                         <th>Email</th>
+                        <th>Active</th>
 
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="w-5">
+                        <!-- <td class="w-5">
                             <input type="text" class="form-control" v-model="form.id">
-                        </td>
+                        </td> -->
                         <td class="w-5">
                             <input type="text" class="form-control" v-model="form.name">
                         </td>
                         <td class="w-5">
                             <input type="text" class="form-control" v-model="form.phone">
                         </td>
-
                         <td class="w-5">
                             <input type="text" class="form-control" v-model="form.store">
                         </td>
                         <td class="w-5">
                             <input type="text" class="form-control" v-model="form.email">
+                        </td>
+                        <td class="w-5">
+                            <input type="text" class="form-control" v-model="form.active">
                         </td>
                     </tr>
                 </tbody>
@@ -104,6 +107,7 @@ export default {
             this.show = true
             this.$bar.finish()
         },
+
         addNewLine() {
             this.form.vendors.push({
                 name: null,

@@ -2018,6 +2018,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      param: "",
+      customer: "",
       model: {
         data: []
       }
@@ -2040,6 +2042,15 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
+    search: function search() {
+      this.param = "?=";
+
+      if (this.customer) {
+        this.param = this.param + "&customer=" + this.customer;
+      }
+
+      (0,_lib_api__WEBPACK_IMPORTED_MODULE_0__.byMethod)('GET', "api/invoices/".concat(this.param));
+    },
     detailsPage: function detailsPage(item) {
       this.$router.push("/invoices/".concat(item.id));
     },
@@ -2289,10 +2300,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _lib_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../lib/api */ "./resources/assets/js/lib/api.js");
 
+ // import { byMethod, get } from '../../lib/api'
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      // param: "",
+      // firstname: "",
       model: {
         data: []
       }
@@ -2315,6 +2329,15 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
+    search: function search() {
+      this.param = "?=";
+
+      if (this.firstname) {
+        this.param = this.param + "&firstname=" + this.firstname;
+      }
+
+      byMethod('GET', "api/customers/".concat(this.param));
+    },
     detailsPage: function detailsPage(item) {
       this.$router.push("/customers/".concat(item.id));
     },
@@ -2804,8 +2827,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      isProcessing: false,
+      errors: {},
       model: {
-        data: []
+        data: [],
+        checkedNames: []
       }
     };
   },
@@ -2854,6 +2880,10 @@ __webpack_require__.r(__webpack_exports__);
           query: query
         });
       }
+    },
+    onActive: function onActive(e, active) {
+      e.active = active;
+      (0,_lib_api__WEBPACK_IMPORTED_MODULE_0__.byMethod)('PUT', "api/vendors/".concat(e.id, "?methods=PUT"), e);
     }
   }
 });
@@ -3480,7 +3510,33 @@ var render = function render() {
     staticClass: "panel-heading"
   }, [_c("span", {
     staticClass: "panel-title"
-  }, [_vm._v("Invoices")]), _vm._v(" "), _c("div", [_c("router-link", {
+  }, [_vm._v("Invoices")]), _vm._v(" "), _c("div", [_c("button", {
+    staticClass: "btn btn-primary",
+    on: {
+      click: _vm.search
+    }
+  }, [_vm._v("\n                Search\n            ")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.customer,
+      expression: "customer"
+    }],
+    attrs: {
+      type: "search",
+      placeholder: "Search",
+      "aria-label": "Search"
+    },
+    domProps: {
+      value: _vm.customer
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.customer = $event.target.value;
+      }
+    }
+  }), _vm._v(" "), _c("router-link", {
     staticClass: "btn btn-primary",
     attrs: {
       to: "/invoices/create"
@@ -4314,29 +4370,6 @@ var render = function render() {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: _vm.form.id,
-      expression: "form.id"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      type: "text"
-    },
-    domProps: {
-      value: _vm.form.id
-    },
-    on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-
-        _vm.$set(_vm.form, "id", $event.target.value);
-      }
-    }
-  })]), _vm._v(" "), _c("td", {
-    staticClass: "w-5"
-  }, [_c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
       value: _vm.form.name,
       expression: "form.name"
     }],
@@ -4423,6 +4456,29 @@ var render = function render() {
         _vm.$set(_vm.form, "email", $event.target.value);
       }
     }
+  })]), _vm._v(" "), _c("td", {
+    staticClass: "w-5"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.form.active,
+      expression: "form.active"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text"
+    },
+    domProps: {
+      value: _vm.form.active
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+
+        _vm.$set(_vm.form, "active", $event.target.value);
+      }
+    }
   })])])])])]), _vm._v(" "), _c("div", {
     staticClass: "panel-footer flex-end"
   }, [_c("div", [_c("button", {
@@ -4457,7 +4513,7 @@ var staticRenderFns = [function () {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("thead", [_c("tr", [_c("th", [_vm._v("ID")]), _vm._v(" "), _c("th", [_vm._v("Name")]), _vm._v(" "), _c("th", [_vm._v("Phone")]), _vm._v(" "), _c("th", [_vm._v("Store")]), _vm._v(" "), _c("th", [_vm._v("Email")])])]);
+  return _c("thead", [_c("tr", [_c("th", [_vm._v("Name")]), _vm._v(" "), _c("th", [_vm._v("Phone")]), _vm._v(" "), _c("th", [_vm._v("Store")]), _vm._v(" "), _c("th", [_vm._v("Email")]), _vm._v(" "), _c("th", [_vm._v("Active")])])]);
 }];
 render._withStripped = true;
 
@@ -4502,23 +4558,32 @@ var render = function render() {
     staticClass: "table table-link"
   }, [_vm._m(0), _vm._v(" "), _c("tbody", _vm._l(_vm.model.data, function (item) {
     return _c("tr", {
-      key: item.data,
-      on: {
-        click: function click($event) {
-          return _vm.detailsPage(item);
-        }
-      }
+      key: item.data
     }, [_c("td", {
-      staticClass: "w-1"
+      staticClass: "w-2"
     }, [_vm._v(_vm._s(item.id))]), _vm._v(" "), _c("td", {
-      staticClass: "w-1"
+      staticClass: "w-3"
     }, [_vm._v(_vm._s(item.name))]), _vm._v(" "), _c("td", {
       staticClass: "w-3"
     }, [_vm._v(_vm._s(item.phone))]), _vm._v(" "), _c("td", {
       staticClass: "w-3"
     }, [_vm._v(_vm._s(item.store))]), _vm._v(" "), _c("td", {
-      staticClass: "w-3"
-    }, [_vm._v(_vm._s(item.email))])]);
+      staticClass: "w-4"
+    }, [_vm._v(_vm._s(item.email))]), _vm._v(" "), _c("td", [item.active == 1 ? _c("button", {
+      staticClass: "btn btn-primary",
+      on: {
+        click: function click($event) {
+          return _vm.onActive(item, 0);
+        }
+      }
+    }, [_vm._v("Active")]) : _c("button", {
+      staticClass: "btn btn-primary",
+      on: {
+        click: function click($event) {
+          return _vm.onActive(item, 1);
+        }
+      }
+    }, [_vm._v("InActive")])])]);
   }), 0)])]), _vm._v(" "), _c("div", {
     staticClass: "panel-footer flex-between"
   }, [_c("div", [_c("small", [_vm._v("Showing " + _vm._s(_vm.model.from) + " - " + _vm._s(_vm.model.to) + " of " + _vm._s(_vm.model.total))])]), _vm._v(" "), _c("div", [_c("button", {
@@ -4544,7 +4609,7 @@ var staticRenderFns = [function () {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("thead", [_c("tr", [_c("th", [_vm._v("ID")]), _vm._v(" "), _c("th", [_vm._v("Name")]), _vm._v(" "), _c("th", [_vm._v("Phone")]), _vm._v(" "), _c("th", [_vm._v("Store")]), _vm._v(" "), _c("th", [_vm._v("Email")])])]);
+  return _c("thead", [_c("tr", [_c("th", [_vm._v("ID")]), _vm._v(" "), _c("th", [_vm._v("Name")]), _vm._v(" "), _c("th", [_vm._v("Phone")]), _vm._v(" "), _c("th", [_vm._v("Store")]), _vm._v(" "), _c("th", [_vm._v("Email")]), _vm._v(" "), _c("th", [_vm._v("Active")])])]);
 }];
 render._withStripped = true;
 

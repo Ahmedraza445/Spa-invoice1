@@ -10,15 +10,58 @@ use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
 {
+    // public function search($customer){
+    // {
+    //     $result = Invoice::where('customer', 'LIKE', '%'. $customer. '%')->get();
+    //     if(count($result)){
+    //      return Response()->json($result);
+    //     }
+    //     else
+    //     {
+    //     return response()->json(['Result' => 'No Data not found'], 404);
+    //   }
+    // }
+    // public function index()
+    // {
+    //     $results = Invoice::with(['customer'])
+    //      ->orderBy('created_at', 'desc')
+    //         ->paginate(15);
+    //     return response()
+    //         ->json(['results' => $results]);
+    // }
+        
+        // $results = Invoice::with(['customer'])
+        //     ->whereHas('firstname', 'like', '%'.$firstname. '%')
+        //     ->get()
+    
+    
     public function index()
-    {
-        $results = Invoice::with(['customer'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+    {   
+        $results = Invoice::with(['customer' => function($q) {
+            $q->select(['id', 'firstname', 'lastname']);
+        }])->get();
 
         return response()
             ->json(['results' => $results]);
     }
+    
+    
+    // public function index(Request $request)
+    // {
+    //     $results = Invoice::where([
+    //         ['customer', '!=', Null],
+    //         [function ($query) use ($request) {
+    //             if (($term = $request->term)) {
+    //                 $query->orWhere('customer', 'LIKE', '%'. $term. '%')->get();
+    //             }
+    //         }]
+    //     ])
+    //         ->orderBy("id", "desc")
+    //         ->paginate(10);
+            
+    //         return response()
+    //             ->json(['results' => $results]); 
+    // }
 
     public function create()
     {

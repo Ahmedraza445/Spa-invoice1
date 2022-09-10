@@ -20,16 +20,30 @@
                         <th>Phone</th>
                         <th>Store</th>
                         <th>Email</th>
+                        <th>Active</th>
 
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in model.data" :key="item.data" @click="detailsPage(item)">
-                        <td class="w-1">{{item.id}}</td>
-                        <td class="w-1">{{item.name}}</td>
+                    <tr v-for="item in model.data" :key="item.data">
+                        <td class="w-2">{{item.id}}</td>
+                        <td class="w-3">{{item.name}}</td>
                         <td class="w-3">{{item.phone}}</td>
                         <td class="w-3">{{item.store}}</td>
-                        <td class="w-3">{{item.email}}</td>
+                        <td class="w-4">{{item.email}}</td>
+                        <!-- if (item.active == 1) { -->
+                        <!-- <td class="w-3">{{item.active == 1}}<button class="btn btn-primary">Active</button> -->
+                        <!-- {{item.active == 0}}<button class="btn b6n-primary">Non-Active</button></td> -->
+                        <!-- <td class="w-3">{{item.active == 0}}
+                            <button class="btn btn-primary">Non-Active</button>
+                        </td> -->
+                        <!-- } -->
+                        <td>
+                            <button v-if="item.active ==1" class="btn btn-primary"
+                                @click="onActive(item,0)">Active</button>
+                            <button v-else class="btn btn-primary" @click="onActive(item,1)">InActive</button>
+                        </td>
+                        <!-- </td> -->
                     </tr>
                 </tbody>
             </table>
@@ -51,12 +65,15 @@
 </template>
 <script type="text/javascript">
 import Vue from 'vue'
-import { get } from '../../lib/api'
+import { byMethod, get } from '../../lib/api'
 export default {
     data() {
         return {
+            isProcessing: false,
+            errors: {},
             model: {
-                data: []
+                data: [],
+                checkedNames: []
             }
         }
     },
@@ -103,7 +120,12 @@ export default {
                     query: query
                 })
             }
-        }
+        },
+        onActive(e, active) {
+            e.active = active;
+            byMethod('PUT', `api/vendors/${e.id}?methods=PUT`, e)
+        },
+
     }
 }
 </script>
