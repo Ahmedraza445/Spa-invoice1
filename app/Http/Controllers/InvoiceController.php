@@ -26,42 +26,25 @@ class InvoiceController extends Controller
     //     $results = Invoice::with(['customer'])
     //      ->orderBy('created_at', 'desc')
     //         ->paginate(15);
+
     //     return response()
     //         ->json(['results' => $results]);
     // }
-        
-        // $results = Invoice::with(['customer'])
-        //     ->whereHas('firstname', 'like', '%'.$firstname. '%')
-        //     ->get()
-    
-    
-    public function index()
-    {   
-        $results = Invoice::with(['customer' => function($q) {
-            $q->select(['id', 'firstname', 'lastname']);
-        }])->get();
+    public function index(Request $request)
+    {
+        // dd($request->all());
+        $results = Invoice::with(['customer'])
+            ->whereHas('customer',function($q) use ($request){
+                    $q->where('firstname','like', '%' . request('customer') . '%');
+                    $q->orWhere('lastname','like', '%' . request('customer') . '%');
+                    })
+            ->orderBy('customer_id', 'asc')
+            ->paginate(15);
 
         return response()
             ->json(['results' => $results]);
     }
     
-    
-    // public function index(Request $request)
-    // {
-    //     $results = Invoice::where([
-    //         ['customer', '!=', Null],
-    //         [function ($query) use ($request) {
-    //             if (($term = $request->term)) {
-    //                 $query->orWhere('customer', 'LIKE', '%'. $term. '%')->get();
-    //             }
-    //         }]
-    //     ])
-    //         ->orderBy("id", "desc")
-    //         ->paginate(10);
-            
-    //         return response()
-    //             ->json(['results' => $results]); 
-    // }
 
     public function create()
     {

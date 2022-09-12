@@ -2043,13 +2043,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     search: function search() {
+      var _this2 = this;
+
       this.param = "?=";
 
       if (this.customer) {
         this.param = this.param + "&customer=" + this.customer;
       }
 
-      (0,_lib_api__WEBPACK_IMPORTED_MODULE_0__.byMethod)('GET', "api/invoices/".concat(this.param));
+      (0,_lib_api__WEBPACK_IMPORTED_MODULE_0__.byMethod)('GET', "api/invoices/".concat(this.param)).then(function (res) {
+        _this2.setData(res);
+      });
     },
     detailsPage: function detailsPage(item) {
       this.$router.push("/invoices/".concat(item.id));

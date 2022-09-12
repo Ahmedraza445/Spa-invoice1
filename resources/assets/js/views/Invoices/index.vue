@@ -8,10 +8,6 @@
                     Search
                 </button>
                 <input type="search" placeholder="Search" aria-label="Search" v-model="customer">
-                <!-- <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form> -->
                 <router-link to="/invoices/create" class="btn btn-primary">
                     New Invoice
                 </router-link>
@@ -91,7 +87,9 @@ export default {
             if (this.customer) {
                 this.param = this.param + "&customer=" + this.customer;
             }
-            byMethod('GET', `api/invoices/${this.param}`)
+            byMethod('GET', `api/invoices/${this.param}`).then((res) => {
+                this.setData(res)
+            })
         },
         detailsPage(item) {
             this.$router.push(`/invoices/${item.id}`)
