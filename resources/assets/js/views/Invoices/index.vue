@@ -4,7 +4,7 @@
             <!-- <span class="panel-title">Invoices</span> -->
             <span class="panel-title">Invoices</span>
             <div class="form-group">
-                <typeahead :url="customerURL" :initialize="form.customer" @input="onCustomer"/>
+                <typeahead :url="customerURL" :initialize="form.customer" @input="onCustomer" />
                 <small class="error-control" v-if="errors.customer_id">
                     {{errors.customer_id[0]}}
                 </small>
@@ -103,9 +103,12 @@ export default {
     methods: {
         search() {
             this.param = "?="
-            if (this.customer) {
-                this.param = this.param + "&customer=" + this.customer;
+            if (this.form.customer_id) {
+                this.param = this.param + "&ahmed=" + this.form.customer_id;
             }
+            // if (this.customer) {
+            //     this.param = this.param + "&customer=" + this.customer;
+            // }
             byMethod('GET', `api/invoices/${this.param}`).then((res) => {
                 this.setData(res)
             })

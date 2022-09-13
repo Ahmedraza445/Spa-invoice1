@@ -33,12 +33,19 @@ class InvoiceController extends Controller
     public function index(Request $request)
     {
         // dd($request->all());
-        $results = Invoice::with(['customer'])
-            ->whereHas('customer',function($q) use ($request){
-                    $q->where('firstname','like', '%' . request('customer') . '%');
-                    $q->orWhere('lastname','like', '%' . request('customer') . '%');
-                    })
-            ->orderBy('customer_id', 'asc')
+        $results = Invoice::with('customer')->when(request()->has('ahmed'), function($q)
+        {
+            $q->where('customer_id','=', request('ahmed'));
+        })
+     
+     
+        
+
+            // ->whereHas('customer',function($q) use ($request){
+                    // $q->Where('firstname','like', '%' . request('ahmed') . '%');
+                    // $q->orWhere('lastname','like', '%' . request('ahmed') . '%');
+                    // })
+            ->orderBy('created_at', 'asc')
             ->paginate(15);
 
         return response()

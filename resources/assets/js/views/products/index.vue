@@ -3,6 +3,13 @@
         <div class="panel-heading">
             <span class="panel-title">Products</span>
             <div>
+                <typeahead :url="vendorURL" :initialize="form.vendor" @input="onVendor" />
+                <small class="error-control" v-if="errors.vendor_id">
+                    {{errors.vendor_id[0]}}
+                </small>
+                <button class="btn btn-primary" @click="search">
+                    Search
+                </button>
                 <router-link to="/products/create" class="btn btn-primary">
                     New Product
                 </router-link>
@@ -52,10 +59,26 @@
 </template>
 <script type="text/javascript">
 import Vue from 'vue'
-import { get } from '../../lib/api'
+import { byMethod, get } from '../../lib/api'
+import { Typeahead } from '../../components/typeahead'
+
+function initialize(to) {
+    let urls = {
+        'index': `/api/products`,
+        // 'edit': `/api/invoices/${to.params.id}/edit`
+    }
+
+    return (urls[to.meta.mode] || urls['index'])
+}
 export default {
+    components: { Typeahead },
     data() {
         return {
+            form: {},
+            errors: {},
+            param: "",
+            vendor: "",
+            vendorURL: '/api/search/vendors',
             model: {
                 data: []
             }
@@ -75,6 +98,20 @@ export default {
             })
     },
     methods: {
+        search() {
+            this.param = "?="
+            if (this.form.vendor_id) {
+                this.param = this.param + "&vendor=" + this.form.vendor_id;
+            }
+            byMethod('GET', `api/products/${this.param}`).then((res) => {
+                this.setData(res)
+            })
+        },
+        onVendor(e) {
+            const vendor = e.target.value
+            Vue.set(this.$data.form, 'vendor', vendor)
+            Vue.set(this.$data.form, 'vendor_id', vendor.id)
+        },
         detailsPage(item) {
             this.$router.push(`/products/${item.id}`)
         },
