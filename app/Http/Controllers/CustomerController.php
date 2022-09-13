@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class CustomerController extends Controller
 {
     
-    public function search($firstname)
+    public function search()
     
     {
         //dd(request()->all());

@@ -2011,15 +2011,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _lib_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../lib/api */ "./resources/assets/js/lib/api.js");
+/* harmony import */ var _components_typeahead__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/typeahead */ "./resources/assets/js/components/typeahead/index.js");
 
+
+
+
+function initialize(to) {
+  var urls = {
+    'index': "/api/invoices" // 'edit': `/api/invoices/${to.params.id}/edit`
+
+  };
+  return urls[to.meta.mode] || urls['index'];
+}
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    Typeahead: _components_typeahead__WEBPACK_IMPORTED_MODULE_1__.Typeahead
+  },
   data: function data() {
     return {
       param: "",
-      customer: "",
+      // customer: "",
+      product: "",
+      productURL: '/api/search/products',
+      title: 'Create',
+      form: {
+        items: []
+      },
+      errors: {},
       model: {
         data: []
       }
@@ -2042,25 +2063,39 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
+    // search() {
+    //     this.param = "?="
+    //     if (this.customer) {
+    //         this.param = this.param + "&customer=" + this.customer;
+    //     }
+    //     byMethod('GET', `api/invoices/${this.param}`).then((res) => {
+    //         this.setData(res)
+    //     })
+    // },
     search: function search() {
       var _this2 = this;
 
       this.param = "?=";
 
-      if (this.customer) {
-        this.param = this.param + "&customer=" + this.customer;
+      if (this.items) {
+        this.param = this.param + "&items=" + this.items;
       }
 
       (0,_lib_api__WEBPACK_IMPORTED_MODULE_0__.byMethod)('GET', "api/invoices/".concat(this.param)).then(function (res) {
         _this2.setData(res);
       });
     },
+    onProduct: function onProduct(e) {
+      var product = e.target.value;
+      vue__WEBPACK_IMPORTED_MODULE_2__["default"].set(this.$data.form.items, 'product', product);
+      vue__WEBPACK_IMPORTED_MODULE_2__["default"].set(this.$data.form.items, 'product_id', product.id);
+    },
     detailsPage: function detailsPage(item) {
       this.$router.push("/invoices/".concat(item.id));
     },
     setData: function setData(res) {
       // console.log(res);
-      vue__WEBPACK_IMPORTED_MODULE_1__["default"].set(this.$data, 'model', res.data.results);
+      vue__WEBPACK_IMPORTED_MODULE_2__["default"].set(this.$data, 'model', res.data.results);
       this.page = this.model.current_page;
       this.$bar.finish(); // console.log(res.data.results.data[0].customer.text)
       // console.log(res.data.results.data)
@@ -3514,33 +3549,24 @@ var render = function render() {
     staticClass: "panel-heading"
   }, [_c("span", {
     staticClass: "panel-title"
-  }, [_vm._v("Invoices")]), _vm._v(" "), _c("div", [_c("button", {
+  }, [_vm._v("Invoices")]), _vm._v(" "), _c("div", {
+    staticClass: "form-group"
+  }, [_c("typeahead", {
+    attrs: {
+      url: _vm.productURL,
+      initialize: _vm.form.items.product
+    },
+    on: {
+      input: _vm.onProduct
+    }
+  }), _vm._v(" "), _vm.errors["items.product_id"] ? _c("small", {
+    staticClass: "error-control"
+  }, [_vm._v("\n                " + _vm._s(_vm.errors["items.product_id"][0]) + "\n            ")]) : _vm._e(), _c("br"), _vm._v(" "), _c("button", {
     staticClass: "btn btn-primary",
     on: {
       click: _vm.search
     }
-  }, [_vm._v("\n                Search\n            ")]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.customer,
-      expression: "customer"
-    }],
-    attrs: {
-      type: "search",
-      placeholder: "Search",
-      "aria-label": "Search"
-    },
-    domProps: {
-      value: _vm.customer
-    },
-    on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.customer = $event.target.value;
-      }
-    }
-  }), _vm._v(" "), _c("router-link", {
+  }, [_vm._v("\n                Search\n            ")]), _vm._v(" "), _c("router-link", {
     staticClass: "btn btn-primary",
     attrs: {
       to: "/invoices/create"
@@ -3600,7 +3626,7 @@ var staticRenderFns = [function () {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("thead", [_c("tr", [_c("th", [_vm._v("ID")]), _vm._v(" "), _c("th", [_vm._v("Date")]), _vm._v(" "), _c("th", [_vm._v("Number")]), _vm._v(" "), _c("th", [_vm._v("Customer")]), _vm._v(" "), _c("th", [_vm._v("Due Date")]), _vm._v(" "), _c("th", [_vm._v("Total")])])]);
+  return _c("thead", [_c("tr", [_c("th", [_vm._v("ID")]), _vm._v(" "), _c("th", [_vm._v("Date")]), _vm._v(" "), _c("th", [_vm._v("Number")]), _vm._v(" "), _c("th"), _vm._v(" "), _c("th", [_vm._v("Customer")]), _vm._v(" "), _c("th", [_vm._v("Due Date")]), _vm._v(" "), _c("th", [_vm._v("Total")])])]);
 }];
 render._withStripped = true;
 

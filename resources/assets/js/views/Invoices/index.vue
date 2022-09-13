@@ -3,11 +3,15 @@
         <div class="panel-heading">
             <!-- <span class="panel-title">Invoices</span> -->
             <span class="panel-title">Invoices</span>
-            <div>
+            <div class="form-group">
+                <typeahead :url="productURL" :initialize="form.items.product" @input="onProduct" />
+                <small class="error-control" v-if="errors[`items.product_id`]">
+                    {{errors[`items.product_id`][0]}}
+                </small><br>
                 <button class="btn btn-primary" @click="search">
                     Search
                 </button>
-                <input type="search" placeholder="Search" aria-label="Search" v-model="customer">
+                <!-- <input type="search" placeholder="Search" aria-label="Search" v-model="customer"> -->
                 <router-link to="/invoices/create" class="btn btn-primary">
                     New Invoice
                 </router-link>
@@ -23,6 +27,7 @@
                         <th>ID</th>
                         <th>Date</th>
                         <th>Number</th>
+                        <th></th>
                         <th>Customer</th>
                         <th>Due Date</th>
                         <th>Total</th>
@@ -58,11 +63,29 @@
 <script type="text/javascript">
 import Vue from 'vue'
 import { byMethod, get } from '../../lib/api'
+import { Typeahead } from '../../components/typeahead'
+
+function initialize(to) {
+    let urls = {
+        'index': `/api/invoices`,
+        // 'edit': `/api/invoices/${to.params.id}/edit`
+    }
+
+    return (urls[to.meta.mode] || urls['index'])
+}
 export default {
+    components: { Typeahead },
     data() {
         return {
             param: "",
-            customer: "",
+            // customer: "",
+            product: "",
+            productURL: '/api/search/products',
+            title: 'Create',
+            form: {
+                items: []
+            },
+            errors: {},
             model: {
                 data: []
             }
@@ -82,14 +105,28 @@ export default {
             })
     },
     methods: {
+        // search() {
+        //     this.param = "?="
+        //     if (this.customer) {
+        //         this.param = this.param + "&customer=" + this.customer;
+        //     }
+        //     byMethod('GET', `api/invoices/${this.param}`).then((res) => {
+        //         this.setData(res)
+        //     })
+        // },
         search() {
             this.param = "?="
-            if (this.customer) {
-                this.param = this.param + "&customer=" + this.customer;
+            if (this.items) {
+                this.param = this.param + "&items=" + this.items;
             }
             byMethod('GET', `api/invoices/${this.param}`).then((res) => {
                 this.setData(res)
             })
+        },
+        onProduct(e) {
+            const product = e.target.value
+            Vue.set(this.$data.form.items, 'product', product)
+            Vue.set(this.$data.form.items, 'product_id', product.id)
         },
         detailsPage(item) {
             this.$router.push(`/invoices/${item.id}`)
