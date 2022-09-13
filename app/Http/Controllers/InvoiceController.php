@@ -30,34 +30,34 @@ class InvoiceController extends Controller
     //     return response()
     //         ->json(['results' => $results]);
     // }
-    // public function index(Request $request)
-    // {
-    //     // dd($request->all());
-    //     $results = Invoice::with(['customer'])
-    //         ->whereHas('customer',function($q) use ($request){
-    //                 $q->where('firstname','like', '%' . request('customer') . '%');
-    //                 $q->orWhere('lastname','like', '%' . request('customer') . '%');
-    //                 })
-    //         ->orderBy('customer_id', 'asc')
-    //         ->paginate(15);
-
-    //     return response()
-    //         ->json(['results' => $results]);
-    // }
     public function index(Request $request)
     {
         // dd($request->all());
-        $results = Invoice::with(['items'])
-            ->whereHas('items',function($q) use ($request){
-                    $q->where('product_id','like', '%' . request('items') . '%');
-                    // $q->orWhere('','like', '%' . request('items') . '%');
+        $results = Invoice::with(['customer'])
+            ->whereHas('customer',function($q) use ($request){
+                    $q->where('firstname','like', '%' . request('customer') . '%');
+                    $q->orWhere('lastname','like', '%' . request('customer') . '%');
                     })
-            ->orderBy('id', 'desc')
+            ->orderBy('customer_id', 'asc')
             ->paginate(15);
 
         return response()
             ->json(['results' => $results]);
     }
+    // public function index(Request $request)
+    // {
+    //     // dd($request->all());
+    //     $results = Invoice::with(['items'])
+    //         ->whereHas('items',function($q) use ($request){
+    //                 $q->where('product_id','like', '%' . request('items') . '%');
+    //                 // $q->orWhere('','like', '%' . request('items') . '%');
+    //                 })
+    //         ->orderBy('id', 'desc')
+    //         ->paginate(15);
+
+    //     return response()
+    //         ->json(['results' => $results]);
+    // }
     
 
     public function create()

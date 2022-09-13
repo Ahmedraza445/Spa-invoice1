@@ -4,14 +4,14 @@
             <!-- <span class="panel-title">Invoices</span> -->
             <span class="panel-title">Invoices</span>
             <div class="form-group">
-                <typeahead :url="productURL" :initialize="form.items.product" @input="onProduct" />
-                <small class="error-control" v-if="errors[`items.product_id`]">
-                    {{errors[`items.product_id`][0]}}
-                </small><br>
+                <typeahead :url="customerURL" :initialize="form.customer" @input="onCustomer"/>
+                <small class="error-control" v-if="errors.customer_id">
+                    {{errors.customer_id[0]}}
+                </small>
                 <button class="btn btn-primary" @click="search">
                     Search
                 </button>
-                <!-- <input type="search" placeholder="Search" aria-label="Search" v-model="customer"> -->
+                <input type="search" placeholder="Search" aria-label="Search" v-model="customer">
                 <router-link to="/invoices/create" class="btn btn-primary">
                     New Invoice
                 </router-link>
@@ -27,7 +27,7 @@
                         <th>ID</th>
                         <th>Date</th>
                         <th>Number</th>
-                        <th></th>
+                        <!-- <th></th> -->
                         <th>Customer</th>
                         <th>Due Date</th>
                         <th>Total</th>
@@ -77,15 +77,11 @@ export default {
     components: { Typeahead },
     data() {
         return {
-            param: "",
-            // customer: "",
-            product: "",
-            productURL: '/api/search/products',
-            title: 'Create',
-            form: {
-                items: []
-            },
+            form: {},
             errors: {},
+            param: "",
+            customer: "",
+            customerURL: '/api/search/customers',
             model: {
                 data: []
             }
@@ -105,28 +101,19 @@ export default {
             })
     },
     methods: {
-        // search() {
-        //     this.param = "?="
-        //     if (this.customer) {
-        //         this.param = this.param + "&customer=" + this.customer;
-        //     }
-        //     byMethod('GET', `api/invoices/${this.param}`).then((res) => {
-        //         this.setData(res)
-        //     })
-        // },
         search() {
             this.param = "?="
-            if (this.items) {
-                this.param = this.param + "&items=" + this.items;
+            if (this.customer) {
+                this.param = this.param + "&customer=" + this.customer;
             }
             byMethod('GET', `api/invoices/${this.param}`).then((res) => {
                 this.setData(res)
             })
         },
-        onProduct(e) {
-            const product = e.target.value
-            Vue.set(this.$data.form.items, 'product', product)
-            Vue.set(this.$data.form.items, 'product_id', product.id)
+        onCustomer(e) {
+            const customer = e.target.value
+            Vue.set(this.$data.form, 'customer', customer)
+            Vue.set(this.$data.form, 'customer_id', customer.id)
         },
         detailsPage(item) {
             this.$router.push(`/invoices/${item.id}`)
