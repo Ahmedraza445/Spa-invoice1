@@ -4,14 +4,25 @@
             <!-- <span class="panel-title">Invoices</span> -->
             <span class="panel-title">Invoices</span>
             <div class="form-group">
-                <typeahead :url="customerURL" :initialize="form.customer" @input="onCustomer" />
+                <!-- <typeahead :url="customerURL" :initialize="form.customer" @input="onCustomer" />
                 <small class="error-control" v-if="errors.customer_id">
                     {{errors.customer_id[0]}}
-                </small>
-                <button class="btn btn-primary" @click="search">
-                    Search
+                </small> -->
+                <!-- <button class="btn btn-primary">
+                    Customer
                 </button>
-                <input type="search" placeholder="Search" aria-label="Search" v-model="customer">
+                <button class="btn btn-primary">
+                    Due date
+                </button> -->
+                <button class="btn btn-primary" @click="disableButton" id="Button">Due date</button>
+                <button class="btn btn-primary" @click="disable" id="theButton">Customer</button>
+                <button class="btn btn-primary" @click="refresh">Refresh</button>
+                <!-- <button class="btn btn-primary" @click="disable" id="theButton">Enable Customer & Disable Due
+                    date</button> -->
+                <!-- <button class="btn btn-primary" @click="search">
+                    Search
+                </button> -->
+                <!-- <input type="search" placeholder="Search" aria-label="Search" v-model="customer"> -->
                 <router-link to="/invoices/create" class="btn btn-primary">
                     New Invoice
                 </router-link>
@@ -81,6 +92,8 @@ export default {
             errors: {},
             param: "",
             customer: "",
+            
+            active: true,
             customerURL: '/api/search/customers',
             model: {
                 data: []
@@ -101,17 +114,36 @@ export default {
             })
     },
     methods: {
-        search() {
-            this.param = "?="
-            if (this.form.customer_id) {
-                this.param = this.param + "&ahmed=" + this.form.customer_id;
+        // search() {
+        //     this.param = "?="
+        //     if (this.form.customer_id) {
+        //         this.param = this.param + "&ahmed=" + this.form.customer_id;
+        //     }
+        //     // if (this.customer) {
+        //     //     this.param = this.param + "&customer=" + this.customer;
+        //     // }
+        //     byMethod('GET', `api/invoices/${this.param}`).then((res) => {
+        //         this.setData(res)
+        //     })
+        // },
+        disableButton() {
+            if (this.active == true) {
+                // Select the element with id "theButton" and disable it
+                document.getElementById("theButton").disabled = true;
+                // document.getElementById("Button").disabled = false;
             }
-            // if (this.customer) {
-            //     this.param = this.param + "&customer=" + this.customer;
-            // }
-            byMethod('GET', `api/invoices/${this.param}`).then((res) => {
-                this.setData(res)
-            })
+        },
+        disable() {
+            if (this.active == true) {
+                // Select the element with id "theButton" and disable it
+                // document.getElementById("Button").disabled = true;
+                document.getElementById("Button").disabled = true;
+                // document.getElementById("theButton").disabled = false;
+            }
+        },
+        refresh() {
+            document.getElementById("Button").disabled = false;
+            document.getElementById("theButton").disabled = false;
         },
         onCustomer(e) {
             const customer = e.target.value
