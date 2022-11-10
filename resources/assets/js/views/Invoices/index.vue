@@ -38,7 +38,6 @@
                         <th>ID</th>
                         <th>Date</th>
                         <th>Number</th>
-                        <!-- <th></th> -->
                         <th>Customer</th>
                         <th>Due Date</th>
                         <th>Total</th>

@@ -1,51 +1,24 @@
 <template>
     <div class="panel" v-if="show">
         <div class="panel-heading">
-            <span class="panel-title">{{ title }} Invoice</span>
+            <h1 class="panel-title">{{ title }} Invoice</h1>
         </div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-12">
+                <div class="col-4">
                     <div class="form-group">
-                        <label>Customer</label>
-                        <typeahead
-                            :url="customerURL"
-                            :initialize="form.customer"
-                            @input="onCustomer"
-                        />
-                        <small class="error-control" v-if="errors.customer_id">
-                            {{ errors.customer_id[0] }}
-                        </small>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label>
-                            Number
-                            <small>Auto Generated</small>
-                        </label>
-                        <span class="form-control">{{ form.number }}</span>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label>
-                            Reference
-                            <small>Optional</small>
-                        </label>
+                        <label> Customer </label>
                         <input
                             type="text"
                             class="form-control"
-                            v-model="form.reference"
+                            v-model="form.customer"
                         />
-                        <small class="error-control" v-if="errors.reference">
-                            {{ errors.reference[0] }}
+                        <small class="error-control" v-if="errors.customer">
+                            {{ errors.customer[0] }}
                         </small>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-6">
+                <div class="col-3">
                     <div class="form-group">
                         <label>Date</label>
                         <input
@@ -58,7 +31,7 @@
                         </small>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-3">
                     <div class="form-group">
                         <label>Due Date</label>
                         <input
@@ -74,17 +47,10 @@
             </div>
             <hr />
             <table class="form-table">
-                <thead>
-                    <tr>
-                        <th>Item Description</th>
-                        <th>Unit Price</th>
-                        <th>Qty</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
                 <tbody>
-                    <tr v-for="(item, index) in form.items">
-                        <td class="w-14">
+                    <tr class="form-group" v-for="(item, index) in form.items">
+                        <td class="col-8">
+                            <th> Item description </th>
                             <typeahead
                                 :url="productURL"
                                 :initialize="item.product"
@@ -97,20 +63,8 @@
                                 {{ errors[`items.${index}.product_id`][0] }}
                             </small>
                         </td>
-                        <td class="w-4">
-                            <input
-                                type="text"
-                                class="form-control"
-                                v-model="item.unit_price"
-                            />
-                            <small
-                                class="error-control"
-                                v-if="errors[`items.${index}.unit_price`]"
-                            >
-                                {{ errors[`items.${index}.unit_price`][0] }}
-                            </small>
-                        </td>
-                        <td class="w-2">
+                        <td class="col-2">
+                            <th> Quantity </th>
                             <input
                                 type="text"
                                 class="form-control"
@@ -123,8 +77,24 @@
                                 {{ errors[`items.${index}.qty`][0] }}
                             </small>
                         </td>
-                        <td class="w-4">
-                            <span class="form-control">
+                        <td class="col-3">
+                            <th> Unit Price </th>
+                            <input
+                                type="text"
+                                class="form-control"
+                                v-model="item.unit_price"
+                            />
+                            <small
+                                class="error-control"
+                                v-if="errors[`items.${index}.unit_price`]"
+                            >
+                                {{ errors[`items.${index}.unit_price`][0] }}
+                            </small>
+                        </td>
+                        <td class="w-6"></td>
+                        <td class="col-4">
+                            <th>Total</th>
+                            <span class="form-control d-flex justify-content-end">
                                 {{
                                     (Number(item.qty) * Number(item.unit_price))
                                         | formatMoney
@@ -139,17 +109,17 @@
                     </tr>
                 </tbody>
                 <tfoot>
+                    <td colspan="2">
+                        <button class="btn btn-sm" @click="addNewLine">
+                            Add New Line
+                        </button>
+                    </td>
                     <tr>
-                        <td colspan="2">
-                            <button class="btn btn-sm" @click="addNewLine">
-                                Add New Line
-                            </button>
-                        </td>
-                        <td class="form-summary">Sub Total</td>
-                        <td>{{ subTotal | formatMoney }}</td>
+                        <td colspan="4" class="form-summary">Sub Total</td>
+                        <td class="form-control">{{ subTotal | formatMoney }}</td>
                     </tr>
                     <tr>
-                        <td colspan="3" class="form-summary">Discount</td>
+                        <td colspan="4" class="form-summary">Discount</td>
                         <td>
                             <input
                                 type="text"
@@ -162,8 +132,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="3" class="form-summary">Grand Total</td>
-                        <td>{{ total | formatMoney }}</td>
+                        <td colspan="4" class="form-summary">Grand Total</td>
+                        <td class="form-control">{{ total | formatMoney }}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -172,16 +142,18 @@
                 <div class="col-12">
                     <div class="form-group">
                         <label>Terms and Conditions</label>
-                        <textarea
-                            class="form-control"
-                            v-model="form.terms_and_conditions"
-                        ></textarea>
-                        <small
-                            class="error-control"
-                            v-if="errors.terms_and_conditions"
-                        >
-                            {{ errors.terms_and_conditions[0] }}
-                        </small>
+                        <div class="col-30">
+                            <textarea
+                                class="form-control"
+                                v-model="form.terms_and_conditions"
+                            ></textarea>
+                            <small
+                                class="error-control"
+                                v-if="errors.terms_and_conditions"
+                            >
+                                {{ errors.terms_and_conditions[0] }}
+                            </small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -209,8 +181,8 @@ import { Typeahead } from "../../components/typeahead";
 
 function initialize(to) {
     let urls = {
-        create: `/api/invoices/create`,
-        edit: `/api/invoices/${to.params.id}/edit`,
+        create: `/api/invoice_new/create`,
+        edit: `/api/invoice_new/${to.params.id}/edit`,
     };
 
     return urls[to.meta.mode] || urls["create"];
@@ -223,12 +195,11 @@ export default {
             errors: {},
             isProcessing: false,
             show: false,
-            resource: "/invoices",
-            store: "/api/invoices",
+            resource: "/invoice_new",
+            store: "/api/invoice_new",
             method: "POST",
             title: "Create",
-            productURL: "/api/search/products",
-            customerURL: "/api/search/customers",
+            productURL: "/api/search/product_new",
         };
     },
     beforeRouteEnter(to, from, next) {
@@ -258,7 +229,7 @@ export default {
             Vue.set(this.$data, "form", res.data.form);
 
             if (this.$route.meta.mode === "edit") {
-                this.store = `/api/invoices/${this.$route.params.id}`;
+                this.store = `/api/invoice_new/${this.$route.params.id}`;
                 this.method = "PUT";
                 this.title = "Edit";
             }
@@ -284,7 +255,7 @@ export default {
             Vue.set(this.form.items[index], "product", product);
             Vue.set(this.form.items[index], "product_id", product.id);
 
-            Vue.set(this.form.items[index], "unit_price", product.unit_price);
+            Vue.set(this.form.items[index], "unit_price", product.price);
         },
         removeItem(index) {
             this.form.items.splice(index, 1);
@@ -302,7 +273,6 @@ export default {
             byMethod(this.method, this.store, this.form)
                 .then((res) => {
                     if (res.data && res.data.saved) {
-                        // this.success(res)
                         this.$router.push(`${this.resource}`);
                     }
                 })

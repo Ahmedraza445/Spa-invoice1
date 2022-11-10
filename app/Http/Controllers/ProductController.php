@@ -22,12 +22,6 @@ class ProductController extends Controller
     }
     public function index()
     {
-        // $results = Product::with(['vendor'])
-        //     ->orderBy('created_at', 'desc')
-        //     ->paginate(15);
-        // //dd($results);
-        // return response()
-        //     ->json(['results'=> $results]);
         $results = Product::with('vendor')->when(request()->has('vendor'), function($q)
         {
             $q->where('vendor_id','=', request('vendor'));
