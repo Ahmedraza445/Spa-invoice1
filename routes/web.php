@@ -6,7 +6,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\Invoice_newController;
 use App\Http\Controllers\Product_newController;
 use App\Http\Controllers\VendorController;
-// use App\Http\Controllers\PgController;
+use App\Http\Controllers\PgController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -15,8 +15,22 @@ use Illuminate\Support\Facades\Route;
 // });
 // Route::resource('/api/customers', 'App\Http\Controllers\CustomerController');
 // Route::resource('/api/page', 'App\Http\Controllers\PgController');
-// Route::post('/api/page/create', [PgController::class, 'create']);
-// Route::get('/api/page/create', [PgController::class, 'showNames']);
+
+Route::get('/api/page', [PgController::class,'index']);
+Route::get('/api/page/create', [PgController::class,'create']);
+Route::post('/api/page/create', [PgController::class,'create']);
+Route::post('/api/page/store', [PgController::class,'store']);
+Route::get('/api/page/{$id}', [PgController::class,'editData']);
+Route::get('/api/pages', [PgController::class,'update']);
+
+
+
+// Route::get('/api/page/ahmed', [PgController::class,'ahmed']);
+Route::get('/api/ahmed','PgController@ahmed');
+
+
+// Route::get('/page/show', [PgController::class,'show']);
+// Route::put('/page/update', [PgController::class,'update']);
 
 // Route::resource('/api/customers', 'App\Http\Controllers\CustomerController');
 

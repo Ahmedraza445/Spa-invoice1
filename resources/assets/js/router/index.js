@@ -7,8 +7,11 @@ const router = new VueRouter({
     routes: [
         // {path: '/', redirect: '/invoices'},
         // { path: '/', component: require('../views/page/form.vue').default },
-        // { path: '/page', component: require('../views/page/form.vue').default },
-        // { path: '/page', component: require('../views/page/form.vue').default },
+        { path: '/page', component: require('../views/page/form.vue').default },
+        { path: '/page/create', component: require('../views/page/form.vue').default},
+
+        // { path: '/page/:id/edit', component: require('../views/page/form.vue').default, meta: { mode: 'edit' } },
+        // { path: '/page/:id/edit', component: require('../views/page/form.vue').default, meta: { mode: 'edit' } },
 
         { path: '/invoices', component: require('../views/Invoices/index.vue').default },
         { path: '/invoices/create', component: require('../views/Invoices/form.vue').default },

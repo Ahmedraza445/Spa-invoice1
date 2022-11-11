@@ -37,6 +37,13 @@
                 >
             </div>
         </div>
+        <div class="panel-heading">
+            <div>
+                <router-link to="/page" class="btn btn-primary"
+                    >Single Pages</router-link
+                >
+            </div>
+        </div>
     </div>
 </template>
 <script>
