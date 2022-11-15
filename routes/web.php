@@ -8,6 +8,7 @@ use App\Http\Controllers\Product_newController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\PgController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 
 // Route::get('/', function () {
@@ -15,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 // });
 // Route::resource('/api/customers', 'App\Http\Controllers\CustomerController');
 // Route::resource('/api/page', 'App\Http\Controllers\PgController');
+Auth::routes();
+Route::middleware(['auth'])->group(function(){
+
+
 
 Route::get('/api/page', [PgController::class,'index']);
 Route::get('/api/page/create', [PgController::class,'create']);
@@ -76,3 +81,7 @@ Route::get('{vue?}',function(){
 })->where('vue', '[\/\w\.-]*');
 
 
+});
+
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
