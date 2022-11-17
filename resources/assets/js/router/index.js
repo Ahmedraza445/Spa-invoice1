@@ -48,7 +48,7 @@ const router = new VueRouter({
         { path: '/vendors/:id/edit', component: require('../views/vendors/form.vue').default, meta: { mode: 'edit' } },
         { path: '/vendors/:id', component: require('../views/vendors/show.vue').default },
 
-        { path: '/', redirect: '/dashboard' },
+        // { path: '/', redirect: '/dashboard' },
         { path: '/dashboard', component: require('../views/Dashboard/index.vue').default },
     ]
 })
